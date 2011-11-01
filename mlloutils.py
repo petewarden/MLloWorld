@@ -9,7 +9,7 @@ def expand_to_vectors(filename, code_headers, target_header=None):
   code_headers_map = {}
   for index, header in enumerate(code_headers):
     code_headers_map[header] = index
-  reader = csv.reader(open(filename)) or die('Couldn\'t open '+filename)
+  reader = csv.reader(open(filename))
   max_code = 0
   max_index = 0
   max_i = 0
@@ -27,7 +27,7 @@ def expand_to_vectors(filename, code_headers, target_header=None):
           code = int(code_string)
           max_code = max(max_code, code)
   max_j = max_index+(len(code_headers)*max_code)
-  reader = csv.reader(open(filename)) or die('Couldn\'t open '+filename)
+  reader = csv.reader(open(filename))
   i_indices = []
   j_indices = []
   values = []
@@ -35,7 +35,6 @@ def expand_to_vectors(filename, code_headers, target_header=None):
   for i, input_row in enumerate(reader):
     if i == 0:
       continue # Skip header row
-    output_row = []
     for index, value in enumerate(input_row):
       if index == target_header:
         target.append(int(value))
