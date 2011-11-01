@@ -5,7 +5,7 @@ import sys
 # Takes in a CSV file that starts with a header row, and returns an array of
 # dictionaries, with the keys set by the names in the header.
 def load_csv(filename):
-  reader = csv.reader(open(filename)) or die('Couldn\'t open '+filename)
+  reader = csv.reader(open(filename))
   line = 0
   output = {}
   for input_row in reader:
