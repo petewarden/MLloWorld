@@ -18,6 +18,9 @@ def expand_to_vectors(filename, code_headers, target_header=None):
     if i == 0:
       continue # Skip header row
     for index, value in enumerate(input_row):
+      if index == target_header:
+        # do not treat the target as a text field
+        continue
       max_index = max(max_index, index)
       if index in code_headers_map:
         codes = value.split(' ')
@@ -54,4 +57,4 @@ def expand_to_vectors(filename, code_headers, target_header=None):
         values.append(int(value))
   shape = (max_i, max_j+1)
   output = sp.coo_matrix((values, (i_indices, j_indices)), shape=shape, dtype=np.dtype(float))
-  return (output, target)
+  return (output, np.asarray(target))
