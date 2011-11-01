@@ -1,1 +1,45 @@
+MLloWorld
+---------
+"Pete Warden" <pete@petewarden.com> - http://petewarden.typepad.com
 
+This is a minimal example of how to write a machine-learning algorithm to solve a prediction problem. It shows you how to create a simple prediction model from a set of training data, using real information from a contest I created on Kaggle:
+http://www.kaggle.com/c/PhotoQualityPrediction/
+
+Installing scikits-learn
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before you can run the python scripts, you'll need to install the scikits-learn machine-learning framework. You can find instructions here:
+http://scikit-learn.sourceforge.net/install.html
+
+Getting this code
+~~~~~~~~~~~~~~~~~
+
+To pull the latest copy of this code and enter the directory run these commands:
+git clone git://github.com/petewarden/MLloWorld.git
+cd MLloWorld/
+
+Creating a model
+~~~~~~~~~~~~~~~~
+
+Before you can predict unknown values, you need to train up the algorithm with example data. I've packaged a set of 40,000 items as a CSV file, with each column representing an attribute of the original photo albums. You'll need to run these through the training script to build a model that can be used for prediction. Here's the command:
+
+python train.py training_data.csv storedmodel
+
+That may take ten or twenty minutes to run, but at the end you should have a file called storedmodel in the current directory.
+
+Predicting results
+~~~~~~~~~~~~~~~~~~
+
+Now that you have a model built, you can take the test set of data and predict their values:
+
+python predict.py test_data.csv storedmodel > results.csv
+
+This will also take a few minutes, but at the end you'll have a CSV file containing a list of the album ids and a prediction for each one. It's in the right format to submit to Kaggle, and if you look for the 'Full scikit-learn example' in the benchmarks at the bottom of the leaderboard, you'll see how this simple approach scored:
+http://www.kaggle.com/c/PhotoQualityPrediction/Leaderboard
+As you can see, it's not that great! If you modify the code and think you've improved its predictions, you can create a team and submit your new results to find out how well you've done. There's already stiff competition from the current teams of course!
+http://www.kaggle.com/c/PhotoQualityPrediction/Submissions
+
+Notes on the internal data format
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The trickiest part for me was getting the data into a format that scikit-learn's functions could understand. Because the CSV stores which words occurred for an album, the full row vector for each of them could be thousands of entries long, most of them zero. To speed up the training and save on memory, I used numpy's sparse matrix class to store the results, coo_matrix. You can see the sort of unpacking I do in the expand_to_vectors() function in mlloutils.py
