@@ -50,8 +50,9 @@ for clf, grid in models:
     msg = 'Training model %r using grid search for best hyper-param: %r' % (
         clf, grid)
     print >> sys.stderr, msg
-    gs = grid_search.GridSearchCV(clf, grid, score_func=metrics.f1_score,
-                                  verbose=1)
+    gs = grid_search.GridSearchCV(
+        clf, grid, score_func=metrics.f1_score, verbose=1,
+        fit_params={'class_weight': 'auto'})
     gs.fit(training_vectors, training_target)
     print "Best model: %r" % gs.best_estimator
     print "Best score: %0.3f" %  gs.best_score
