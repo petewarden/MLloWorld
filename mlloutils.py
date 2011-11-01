@@ -52,6 +52,6 @@ def expand_to_vectors(filename, code_headers, target_header=None):
         i_indices.append(i-1)
         j_indices.append(index)
         values.append(int(value))
-  shape = (max_i+1, max_j+1)
+  shape = (max_i, max_j+1)
   output = sp.coo_matrix((values, (i_indices, j_indices)), shape=shape, dtype=np.dtype(float))
   return (output, target)
