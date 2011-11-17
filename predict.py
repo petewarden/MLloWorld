@@ -17,7 +17,7 @@ clf = joblib.load(model_name)
 
 test_name = sys.argv[1]
 print >> sys.stderr, 'Loading test set from '+test_name
-test_vectors, ids = expand_to_vectors(test_name, [6, 7, 8], 0)
+test_vectors, ids = expand_to_vectors(test_name, 1, 2, [6, 7, 8], 0)
 print "%d vectors with dimension %d" % test_vectors.shape
 
 print >> sys.stderr, 'Predicting...'

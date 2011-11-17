@@ -20,7 +20,7 @@ if len(sys.argv) < 3:
 training_name = sys.argv[1]
 print >> sys.stderr, 'Loading training set from '+training_name
 training_vectors, training_target = expand_to_vectors(
-    training_name, [6, 7, 8], 9)
+    training_name, 1, 2, [6, 7, 8], 9)
 print "%d vectors with dimension %d" % training_vectors.shape
 
 # Normalize the sparse positive features using the TF-IDF normalizer as field

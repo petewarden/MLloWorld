@@ -5,7 +5,7 @@ import scipy.sparse as sp
 # Takes our Kaggle data sets, where some of the columns are lists of space-separated
 # numbers representing words, and expands them into a flat array containing a binary
 # value for each possible word, indicating if it was present
-def expand_to_vectors(filename, code_headers, target_header=None):
+def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_header=None):
   code_headers_map = {}
   for index, header in enumerate(code_headers):
     code_headers_map[header] = index
@@ -29,13 +29,15 @@ def expand_to_vectors(filename, code_headers, target_header=None):
             continue
           code = int(code_string)
           max_code = max(max_code, code)
-  max_j = max_index+(len(code_headers)*max_code)
+  latlon_start = max_index+(len(code_headers)*max_code)
+  max_j = latlon_start+360*180
   reader = csv.reader(open(filename))
   i_indices = []
   j_indices = []
   values = []
   target = []
   for i, input_row in enumerate(reader):
+    latlon = {'lat':0, 'lon':0}
     if i == 0:
       continue # Skip header row
     for index, value in enumerate(input_row):
@@ -51,10 +53,17 @@ def expand_to_vectors(filename, code_headers, target_header=None):
           i_indices.append(i-1)
           j_indices.append(code_offset+code)
           values.append(1.0)
+      elif index == lat_header:
+        latlon['lat'] = int(value)
+      elif index == lon_header:
+        latlon['lon'] = int(value)
       elif index != 0:
         i_indices.append(i-1)
         j_indices.append(index)
         values.append(int(value))
+    i_indices.append(i-1)
+    j_indices.append(latlon_start+(latlon['lat']+90)*360+latlon['lon']+180)
+    values.append(1.0)
   shape = (max_i, max_j+1)
   output = sp.coo_matrix((values, (i_indices, j_indices)), shape=shape, dtype=np.dtype(float))
   return (output, np.asarray(target))
