@@ -5,12 +5,12 @@ import scipy.sparse as sp
 # Takes our Kaggle data sets, where some of the columns are lists of space-separated
 # numbers representing words, and expands them into a flat array containing a binary
 # value for each possible word, indicating if it was present
-def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_header=None):
+def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_header=None, int_target=False):
   code_headers_map = {}
   for index, header in enumerate(code_headers):
     code_headers_map[header] = index
   reader = csv.reader(open(filename))
-  max_code = 0
+  max_code = 2153 # number of whitelisted words
   max_index = 0
   max_i = 0
   for i, input_row in enumerate(reader):
@@ -22,13 +22,6 @@ def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_hea
         # do not treat the target as a text field
         continue
       max_index = max(max_index, index)
-      if index in code_headers_map:
-        codes = value.split(' ')
-        for code_string in codes:
-          if code_string == '':
-            continue
-          code = int(code_string)
-          max_code = max(max_code, code)
   latlon_start = max_index+(len(code_headers)*max_code)
   max_j = latlon_start+360*180
   reader = csv.reader(open(filename))
@@ -42,7 +35,10 @@ def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_hea
       continue # Skip header row
     for index, value in enumerate(input_row):
       if index == target_header:
-        target.append(int(value))
+        if int_target
+          target.append(int(value))
+        else
+          target.append(val)
       elif index in code_headers_map:
         code_offset = max_index+(code_headers_map[index]*max_code)
         codes = value.split(' ')
