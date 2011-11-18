@@ -35,7 +35,7 @@ def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_hea
       continue # Skip header row
     for index, value in enumerate(input_row):
       if index == target_header:
-        if int_target
+        if int_target:
           target.append(int(value))
         else
           target.append(val)
