@@ -38,7 +38,7 @@ def expand_to_vectors(filename, lat_header, lon_header, code_headers, target_hea
         if int_target:
           target.append(int(value))
         else:
-          target.append(val)
+          target.append(value)
       elif index in code_headers_map:
         code_offset = max_index+(code_headers_map[index]*max_code)
         codes = value.split(' ')
